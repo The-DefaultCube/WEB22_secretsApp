@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const path = require("path");
 const mongoose = require('mongoose');
+var encrypt = require('mongoose-encryption');
+
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -21,6 +23,10 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String
 });
+
+//mongoose-encryption plugin
+const secret = "MySecretString12345";
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"]});
 
 const User = mongoose.model("User", userSchema);
 
@@ -62,7 +68,10 @@ app.post("/login", function (req, res) {
 		else
 			if(foundUser)//i.e foundUser != null
 				if(foundUser.password === existingPassword)
+					{
 					res.render("secrets");
+					// console.log(foundUser.password);
+					}
 				else
 					console.log("Invalid Password.")
 			else
