@@ -1,3 +1,4 @@
+require('dotenv').config();//keep at top
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //mongoose-encryption plugin
-const secret = "MySecretString12345";
+const secret = process.env.MY_SECRET_KEY;
 userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"]});
 
 const User = mongoose.model("User", userSchema);
